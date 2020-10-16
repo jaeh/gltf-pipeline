@@ -921,3 +921,39 @@ describe('removes unused materials, textures, images, samplers', () => {
         expect(gltf.accessors[2].name).toEqual('S');
     });
 });
+
+describe('remove.node never errors on empty scene.nodes', () => {
+    it('does not error if scene.nodes is undefined', () => {
+        const undefinedNodesGltf = {
+            ...gltf,
+            nodes: undefined
+        };
+
+        const afterRemove = removeUnusedElements(undefinedNodesGltf);
+
+        expect(afterRemove).toEqual(undefinedNodesGltf);
+    });
+
+    it('does not error if scene.nodes is set but null', () => {
+        const nullNodesGltf = {
+            ...gltf,
+            nodes: null
+        };
+
+        const afterRemove = removeUnusedElements(nullNodesGltf);
+
+        expect(afterRemove).toEqual(nullNodesGltf);
+    });
+
+    it('does not error if scene.nodes is deleted', () => {
+        const deleteNodesGltf = {
+            ...gltf
+        };
+
+        delete deleteNodesGltf.nodes;
+
+        const afterRemove = removeUnusedElements(deleteNodesGltf);
+
+        expect(afterRemove).toEqual(deleteNodesGltf);
+    });
+});
